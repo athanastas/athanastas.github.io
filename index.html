@@ -1,0 +1,1198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="description" content="Manuals and technical resources for broadcast TV professionals"/>
+<title>Info &amp; Tech Solutions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Exo+2:wght@300;400;600;800&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --bg:        #0a0c0f;
+    --surface:   #111418;
+    --surface2:  #181c22;
+    --border:    #1e2530;
+    --amber:     #f0a500;
+    --amber2:    #ffca3a;
+    --cyan:      #00d4ff;
+    --red:       #ff3b3b;
+    --text:      #c8cdd6;
+    --text-dim:  #5a6272;
+    --mono:      'Share Tech Mono', monospace;
+    --sans:      'Exo 2', sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-weight: 300;
+    line-height: 1.7;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── SCANLINE OVERLAY ────────────────────────────────── */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0,0,0,.08) 2px,
+      rgba(0,0,0,.08) 4px
+    );
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  /* ── NOISE TEXTURE ───────────────────────────────────── */
+  body::after {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9998;
+    opacity: .5;
+  }
+
+  /* ── HEADER ──────────────────────────────────────────── */
+  header {
+    position: sticky; top: 0; z-index: 500;
+    background: rgba(10,12,15,.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 60px;
+  }
+
+  .logo {
+    font-family: var(--mono);
+    font-size: .9rem;
+    color: var(--amber);
+    letter-spacing: .08em;
+    text-decoration: none;
+    display: flex; align-items: center; gap: .5rem;
+    cursor: pointer;
+  }
+  .logo::before {
+    content: '▶';
+    font-size: .7rem;
+    animation: blink 1.4s step-end infinite;
+  }
+  @keyframes blink { 50% { opacity: 0; } }
+
+  .logo span { color: var(--text); }
+
+  /* ── HAMBURGER ───────────────────────────────────────── */
+  .hamburger {
+    display: none;
+    flex-direction: column; gap: 5px;
+    cursor: pointer; padding: 6px;
+    background: none; border: none;
+  }
+  .hamburger span {
+    width: 22px; height: 2px;
+    background: var(--amber);
+    display: block;
+    transition: all .3s;
+  }
+
+  /* ── NAV ─────────────────────────────────────────────── */
+  nav {
+    display: flex; gap: .25rem;
+  }
+
+  nav a {
+    font-family: var(--mono);
+    font-size: .72rem;
+    letter-spacing: .05em;
+    color: var(--text-dim);
+    text-decoration: none;
+    padding: .35rem .65rem;
+    border-radius: 3px;
+    border: 1px solid transparent;
+    transition: all .2s;
+    white-space: nowrap;
+  }
+  nav a:hover, nav a.active {
+    color: var(--amber);
+    border-color: var(--amber);
+    background: rgba(240,165,0,.07);
+  }
+
+  /* ── HERO STRIPE ─────────────────────────────────────── */
+  .hero-stripe {
+    height: 3px;
+    background: linear-gradient(90deg, var(--red), var(--amber), var(--cyan));
+    width: 0;
+    animation: stripe-in 1s ease-out .2s forwards;
+  }
+  @keyframes stripe-in { to { width: 100%; } }
+
+  /* ── PAGE WRAPPER ────────────────────────────────────── */
+  main {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 3rem 2rem 5rem;
+  }
+
+  /* ── SECTION TITLE ───────────────────────────────────── */
+  .page-title {
+    font-family: var(--mono);
+    font-size: 1.6rem;
+    color: var(--amber);
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: .75rem;
+  }
+  .page-title::before {
+    content: '//';
+    color: var(--text-dim);
+    font-size: 1rem;
+  }
+
+  /* ── CARDS GRID ──────────────────────────────────────── */
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.25rem;
+    margin-top: 2rem;
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 1.75rem 1.5rem;
+    cursor: pointer;
+    transition: border-color .2s, transform .2s, box-shadow .2s;
+    display: flex; flex-direction: column; gap: .75rem;
+    text-decoration: none;
+    color: inherit;
+  }
+  .card:hover {
+    border-color: var(--amber);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(240,165,0,.1);
+  }
+
+  .card-icon {
+    font-size: 1.8rem;
+    line-height: 1;
+  }
+  .card-title {
+    font-family: var(--mono);
+    font-size: .85rem;
+    color: var(--amber2);
+    letter-spacing: .06em;
+    text-transform: uppercase;
+  }
+  .card-desc {
+    font-size: .82rem;
+    color: var(--text);
+    line-height: 1.6;
+  }
+
+  /* ── CONTENT SECTIONS ────────────────────────────────── */
+  .content-block {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 2rem;
+    margin-bottom: 1.5rem;
+    animation: fade-up .4s ease both;
+  }
+  @keyframes fade-up {
+    from { opacity:0; transform: translateY(16px); }
+    to   { opacity:1; transform: translateY(0); }
+  }
+
+  .content-block h3 {
+    font-family: var(--mono);
+    font-size: .8rem;
+    letter-spacing: .1em;
+    color: var(--cyan);
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+
+  /* ── IMAGE GALLERY ───────────────────────────────────── */
+  .img-gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1rem;
+    margin: 1.5rem 0;
+  }
+  .img-gallery figure {
+    margin: 0;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: border-color .2s, transform .2s, box-shadow .2s;
+    cursor: zoom-in;
+  }
+  .img-gallery figure:hover {
+    border-color: var(--amber);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 24px rgba(240,165,0,.12);
+  }
+  .img-gallery figure img {
+    width: 100%;
+    height: 170px;
+    object-fit: cover;
+    display: block;
+  }
+  .img-gallery figure figcaption {
+    font-family: var(--mono);
+    font-size: .67rem;
+    color: var(--text-dim);
+    padding: .45rem .6rem;
+    letter-spacing: .04em;
+    border-top: 1px solid var(--border);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  /* wide images span 2 cols */
+  .img-gallery figure.wide {
+    grid-column: span 2;
+  }
+  .img-gallery figure.wide img { height: 260px; }
+
+  /* ── LIBRARY BUTTON ──────────────────────────────────── */
+  .lib-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: .6rem;
+    margin-top: 1.5rem;
+    padding: .65rem 1.4rem;
+    background: rgba(240,165,0,.08);
+    border: 1px solid var(--amber);
+    border-radius: 4px;
+    color: var(--amber2);
+    font-family: var(--mono);
+    font-size: .82rem;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: background .2s, transform .15s;
+  }
+  .lib-btn:hover {
+    background: rgba(240,165,0,.18);
+    transform: translateX(3px);
+  }
+  .lib-btn::before { content: '↗'; font-size: 1rem; }
+
+  /* ── DRIVE EMBED ─────────────────────────────────────── */
+  .drive-wrap {
+    margin-top: 1.25rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+    background: var(--surface2);
+  }
+  .drive-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: .6rem 1rem;
+    background: rgba(0,0,0,.3);
+    border-bottom: 1px solid var(--border);
+    font-family: var(--mono);
+    font-size: .7rem;
+    color: var(--text-dim);
+    letter-spacing: .06em;
+  }
+  .drive-header span { color: var(--amber); }
+  .drive-header a {
+    color: var(--text-dim);
+    text-decoration: none;
+    font-size: .68rem;
+    padding: .2rem .5rem;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    transition: all .2s;
+  }
+  .drive-header a:hover { color: var(--amber); border-color: var(--amber); }
+  .drive-wrap iframe {
+    display: block;
+    width: 100%;
+    height: 380px;
+    border: none;
+    filter: invert(1) hue-rotate(180deg);
+  }
+  .drive-wrap.no-invert iframe { filter: none; }
+
+  /* ── CODE / TIPS BLOCK ───────────────────────────────── */
+  .tips-block {
+    background: #090b0e;
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--cyan);
+    border-radius: 4px;
+    padding: 1.5rem;
+    font-family: var(--mono);
+    font-size: .78rem;
+    line-height: 2;
+    color: #8af;
+    margin: 1rem 0;
+    overflow-x: auto;
+  }
+  .tips-block strong {
+    color: var(--amber2);
+    font-weight: 600;
+  }
+  .tips-block a {
+    color: var(--cyan);
+    text-decoration: none;
+  }
+  .tips-block a:hover { text-decoration: underline; }
+
+  .tip-item {
+    margin: 1.25rem 0;
+    padding: 1rem 1.2rem;
+    border-radius: 4px;
+    background: rgba(0,212,255,.03);
+    border: 1px solid rgba(0,212,255,.08);
+  }
+  .tip-item strong {
+    color: var(--amber2);
+    font-family: var(--mono);
+  }
+
+  /* ── HOME HERO ───────────────────────────────────────── */
+  .home-hero {
+    position: relative;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 2rem;
+  }
+  .home-hero img {
+    width: 100%;
+    max-height: 380px;
+    object-fit: cover;
+    display: block;
+    opacity: .85;
+  }
+  .home-hero-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg, rgba(10,12,15,.7) 0%, transparent 60%);
+    display: flex; flex-direction: column; justify-content: flex-end;
+    padding: 2rem;
+  }
+  .home-hero-title {
+    font-family: var(--mono);
+    font-size: 1rem;
+    color: var(--amber);
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    margin-bottom: .3rem;
+  }
+  .home-hero-sub {
+    font-size: .8rem;
+    color: var(--text-dim);
+    font-family: var(--mono);
+  }
+
+  /* ── BIO SECTION ─────────────────────────────────────── */
+  .bio-section {
+    background: linear-gradient(135deg, rgba(240,165,0,.08) 0%, rgba(0,212,255,.05) 100%);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 1.5rem;
+    align-items: start;
+    animation: fade-up .5s ease both;
+  }
+
+  .bio-icon {
+    font-size: 2.8rem;
+    line-height: 1;
+    opacity: .8;
+    flex-shrink: 0;
+  }
+
+  .bio-content h2 {
+    font-family: var(--mono);
+    font-size: 1rem;
+    color: var(--amber);
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    margin-bottom: .3rem;
+    font-weight: 600;
+  }
+
+  .bio-content h2 a {
+    color: var(--amber);
+    text-decoration: none;
+    transition: color .2s;
+  }
+
+  .bio-content h2 a:hover {
+    color: var(--amber2);
+  }
+
+  .bio-content p {
+    font-size: .82rem;
+    color: var(--text);
+    line-height: 1.7;
+    margin: 0;
+  }
+
+  /* ── STATUS BAR ──────────────────────────────────────── */
+  .status-bar {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    height: 28px;
+    background: rgba(10,12,15,.97);
+    border-top: 1px solid var(--border);
+    display: flex; align-items: center;
+    padding: 0 1.5rem;
+    gap: 2rem;
+    z-index: 500;
+    font-family: var(--mono);
+    font-size: .65rem;
+    color: var(--text-dim);
+  }
+  .status-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: #2ef55e;
+    animation: pulse-dot 2s ease-in-out infinite;
+    flex-shrink: 0;
+  }
+  @keyframes pulse-dot {
+    0%, 100% { opacity: 1; }
+    50% { opacity: .3; }
+  }
+
+  /* ── LIGHTBOX ────────────────────────────────────────── */
+  #lightbox {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,.92);
+    z-index: 1000;
+    align-items: center; justify-content: center;
+    cursor: zoom-out;
+    padding: 1rem;
+  }
+  #lightbox.open { display: flex; }
+  #lightbox img {
+    max-width: 90vw; max-height: 85vh;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+  }
+
+  /* ── PAGES ───────────────────────────────────────────── */
+  .page { display: none; animation: fade-up .35s ease both; }
+  .page.active { display: block; }
+
+  /* ── RESPONSIVE ──────────────────────────────────────── */
+  
+  /* TABLET & SMALL DESKTOP (700px - 999px) */
+  @media (max-width: 999px) {
+    .card-grid {
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 1rem;
+    }
+  }
+
+  /* TABLET (768px - 1024px) */
+  @media (max-width: 768px) {
+    header { padding: 0 1rem; height: 56px; }
+    .logo { font-size: .85rem; }
+    .hamburger { display: flex; }
+    nav {
+      position: fixed; top: 56px; left: 0; right: 0;
+      flex-direction: column;
+      background: rgba(10,12,15,.99);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+      padding: 1.25rem 1rem;
+      gap: .6rem;
+      max-height: calc(100vh - 56px);
+      overflow-y: auto;
+      transform: translateX(-105%);
+      transition: transform .35s cubic-bezier(0.34, 1.56, 0.64, 1);
+      z-index: 400;
+    }
+    nav.open { transform: translateX(0); }
+    nav a {
+      font-size: .8rem;
+      padding: .5rem .8rem;
+      border-radius: 4px;
+    }
+    main { padding: 2.5rem 1.25rem 5rem; }
+    .page-title { 
+      font-size: 1.2rem; 
+      margin-bottom: 1.5rem;
+      padding-bottom: .75rem;
+    }
+    .home-hero img { max-height: 300px; }
+    .bio-section {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+      padding: 1.25rem;
+      margin: 1.25rem 0;
+    }
+    .bio-icon { font-size: 2.2rem; }
+    .bio-content h2 { font-size: .95rem; margin-bottom: .25rem; }
+    .bio-content p { font-size: .78rem; line-height: 1.6; }
+    .card-grid { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: .9rem; }
+    .card { padding: 1.5rem 1.25rem; }
+    .card-icon { font-size: 1.5rem; }
+    .card-title { font-size: .75rem; }
+    .card-desc { font-size: .75rem; }
+    .img-gallery { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: .75rem; }
+    .img-gallery figure img { height: 140px; }
+    .img-gallery figure.wide { grid-column: span 1; }
+    .img-gallery figure.wide img { height: 140px; }
+    .drive-wrap iframe { height: 300px; }
+    .content-block { padding: 1.5rem; margin-bottom: 1.25rem; }
+    .tips-block { padding: 1rem 1rem; font-size: .7rem; line-height: 1.8; }
+    .status-bar { height: 24px; font-size: .6rem; padding: 0 1rem; }
+  }
+
+  /* MOBILE (480px - 767px) */
+  @media (max-width: 480px) {
+    header { 
+      padding: 0 .75rem; 
+      height: 52px;
+      justify-content: space-between;
+    }
+    .logo { 
+      font-size: .75rem;
+      gap: .3rem;
+      letter-spacing: .05em;
+    }
+    .logo::before { font-size: .6rem; }
+    
+    .hamburger { 
+      gap: 4px;
+      padding: 4px;
+    }
+    .hamburger span {
+      width: 18px;
+      height: 1.5px;
+    }
+    
+    nav {
+      top: 52px;
+      padding: 1rem .75rem;
+      gap: .5rem;
+    }
+    nav a {
+      font-size: .7rem;
+      padding: .4rem .6rem;
+    }
+    
+    main { 
+      padding: 1.75rem .75rem 4.5rem; 
+      max-width: 100%;
+    }
+    
+    .page-title { 
+      font-size: 1rem;
+      margin-bottom: 1.25rem;
+      padding-bottom: .6rem;
+      letter-spacing: .08em;
+    }
+    .page-title::before { font-size: .8rem; }
+    
+    .home-hero { margin-bottom: 1.5rem; border-radius: 4px; }
+    .home-hero img { max-height: 220px; }
+    .home-hero-overlay { padding: 1.5rem; }
+    .home-hero-title { font-size: .85rem; margin-bottom: .25rem; }
+    .home-hero-sub { font-size: .7rem; }
+
+    .bio-section {
+      grid-template-columns: 1fr;
+      gap: .75rem;
+      padding: 1rem;
+      margin: 1rem 0;
+    }
+    .bio-icon { font-size: 1.8rem; }
+    .bio-content h2 { font-size: .85rem; margin-bottom: .2rem; }
+    .bio-content p { font-size: .7rem; line-height: 1.5; }
+    
+    .card-grid { 
+      grid-template-columns: 1fr;
+      gap: .75rem;
+      margin-top: 1.5rem;
+    }
+    .card { 
+      padding: 1.25rem;
+      gap: .6rem;
+    }
+    .card-icon { font-size: 1.4rem; }
+    .card-title { font-size: .7rem; }
+    .card-desc { font-size: .7rem; line-height: 1.5; }
+    
+    .content-block { 
+      padding: 1.25rem;
+      margin-bottom: 1rem;
+      border-radius: 4px;
+    }
+    .content-block h3 {
+      font-size: .7rem;
+      margin-bottom: .75rem;
+    }
+    
+    .img-gallery { 
+      grid-template-columns: 1fr;
+      gap: .6rem;
+      margin: 1rem 0;
+    }
+    .img-gallery figure { border-radius: 4px; }
+    .img-gallery figure img { height: 180px; }
+    .img-gallery figure.wide { grid-column: span 1; }
+    .img-gallery figure.wide img { height: 180px; }
+    .img-gallery figure figcaption {
+      font-size: .6rem;
+      padding: .35rem .5rem;
+    }
+    
+    .drive-wrap { 
+      margin-top: 1rem;
+      border-radius: 4px;
+    }
+    .drive-header {
+      padding: .5rem .75rem;
+      font-size: .65rem;
+      flex-wrap: wrap;
+    }
+    .drive-header a {
+      font-size: .6rem;
+      padding: .15rem .4rem;
+    }
+    .drive-wrap iframe { 
+      height: 250px;
+      min-height: 250px;
+    }
+    
+    .lib-btn {
+      padding: .5rem 1rem;
+      font-size: .7rem;
+      margin-top: 1rem;
+    }
+    .lib-btn::before { font-size: .8rem; }
+    
+    .tips-block {
+      padding: .9rem;
+      font-size: .65rem;
+      line-height: 1.7;
+      border-left: 2px solid var(--cyan);
+    }
+    
+    .tip-item {
+      padding: .75rem;
+      margin: 1rem 0;
+    }
+    
+    .status-bar { 
+      height: 22px;
+      font-size: .55rem;
+      padding: 0 .75rem;
+      gap: 1rem;
+    }
+    .status-dot { width: 5px; height: 5px; }
+  }
+
+  /* EXTRA SMALL DEVICES (< 480px) */
+  @media (max-width: 360px) {
+    .logo { font-size: .65rem; }
+    .logo span { display: none; }
+    main { padding: 1.5rem .6rem 4rem; }
+    .page-title { font-size: .9rem; }
+    .card-grid { gap: .6rem; }
+    .card { padding: 1rem; }
+    .img-gallery { gap: .5rem; }
+    .img-gallery figure img { height: 150px; }
+    .content-block { padding: 1rem; margin-bottom: .75rem; }
+    .tips-block { padding: .75rem; font-size: .6rem; line-height: 1.6; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo" onclick="navigate('home')">INFO<span>&amp;TECH</span> // SOLUTIONS</div>
+  <button class="hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+  <nav id="nav">
+    <a href="#home"          data-page="home">HOME</a>
+    <a href="#iptv"          data-page="iptv">IP TV</a>
+    <a href="#tech"          data-page="tech">TECH MANUAL</a>
+    <a href="#info"          data-page="info">INFO</a>
+    <a href="#network"       data-page="network">PC &amp; NETWORK</a>
+    <a href="#rf"            data-page="rf">RF &amp; MICROWAVE</a>
+    <a href="#other"         data-page="other">OTHER STUFF</a>
+  </nav>
+</header>
+
+<div class="hero-stripe"></div>
+
+<main>
+
+  <!-- ══ HOME ══════════════════════════════════════════════ -->
+  <div class="page active" id="page-home">
+    <div class="home-hero">
+      <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjSRAsnbOoNzbyWZaURSBMjDSt-KH9T9_8tiJ5RokvzNQzmL0xJcYD_DvMbh8UmAfX1wqfv1EkzeLUhw7-VlSxH1gfWwq-I3b_Q09_BHBQqU843FTaZEAtBGa4RnSb4STFLu8befdYhHcf8aOedSqJk3AoAPBpA6oMp12z83ZH5Xykqg-NpK2ZgaYunUyY/w1280/share.jpg" alt="Broadcast Solutions" onerror="this.style.display='none'"/>
+      <div class="home-hero-overlay">
+        <div class="home-hero-title">Broadcast Solutions</div>
+        <div class="home-hero-sub">manuals &amp; technical resources for broadcast TV</div>
+      </div>
+    </div>
+
+    <div class="bio-section">
+      <div class="bio-icon">👤</div>
+      <div class="bio-content">
+        <h2><a href="https://www.linkedin.com/in/thanos-anastasiadis/" target="_blank" rel="noopener">Thanos Anastasiadis</a></h2>
+        <p>Expertise in system installation, maintenance, and troubleshooting for complex electronic, broadcast, and networking environments. Adept at ensuring operational reliability, optimizing workflows, and supporting high-availability broadcast platforms.</p>
+      </div>
+    </div>
+
+    <div class="card-grid">
+      <div class="card" onclick="navigate('iptv')">
+        <div class="card-icon">📡</div>
+        <div class="card-title">IP TV</div>
+        <div class="card-desc">IPTV guides, configuration manuals and library resources.</div>
+      </div>
+      <div class="card" onclick="navigate('tech')">
+        <div class="card-icon">🎛️</div>
+        <div class="card-title">Technical Manual</div>
+        <div class="card-desc">Sony XDCAM, VTR units, broadcast equipment service manuals.</div>
+      </div>
+      <div class="card" onclick="navigate('info')">
+        <div class="card-icon">📋</div>
+        <div class="card-title">INFO</div>
+        <div class="card-desc">Video standards, connector pinouts, talkback systems and more.</div>
+      </div>
+      <div class="card" onclick="navigate('network')">
+        <div class="card-icon">🌐</div>
+        <div class="card-title">PC &amp; Network Tips</div>
+        <div class="card-desc">Essential network commands, Windows optimisation, VPN protocols.</div>
+      </div>
+      <div class="card" onclick="navigate('rf')">
+        <div class="card-icon">📶</div>
+        <div class="card-title">RF &amp; Microwaves</div>
+        <div class="card-desc">RF &amp; microwave reference charts and Android privacy tips.</div>
+      </div>
+      <div class="card" onclick="navigate('other')">
+        <div class="card-icon">⚙️</div>
+        <div class="card-title">Other Technical Stuff</div>
+        <div class="card-desc">AI, cybersecurity frameworks, and other technical resources.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ IP TV ══════════════════════════════════════════════ -->
+  <div class="page" id="page-iptv">
+    <div class="page-title">IP TV</div>
+    <div class="content-block">
+      <div class="img-gallery">
+        <figure class="wide" style="cursor:default">
+          <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi0UeZZpRN6eogS00ntN8pJit9qearhSJwyyrlEA3vwtzSDcBDV48vinLcHUHO72Zy4UJJ4F6405nzCOYfL4101XKF7flR9_f_S5JkiG8a0zDtXT-sfFagv0nFjp1eKytwkF_Rtio371bc/s1137/Guide+IPTV.JPG" alt="IPTV Guide" style="height:auto;max-height:none;width:100%;object-fit:contain;"/>
+          <figcaption>IPTV Configuration Guide</figcaption>
+        </figure>
+      </div>
+      <div class="drive-wrap">
+        <div class="drive-header">
+          <span>📁 LIBRARY</span> IP TV Manuals
+          <a href="https://drive.google.com/drive/folders/15g0ZBMrghJJNdi3gNVBg_YxXPdTg9vK0?usp=drive_link" target="_blank" rel="noopener">Open in Drive ↗</a>
+        </div>
+        <iframe src="https://drive.google.com/embeddedfolderview?id=15g0ZBMrghJJNdi3gNVBg_YxXPdTg9vK0#list" title="IP TV Library" loading="lazy" allowfullscreen></iframe>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ TECHNICAL MANUAL ════════════════════════════════════ -->
+  <div class="page" id="page-tech">
+    <div class="page-title">Technical Manual</div>
+    <div class="content-block">
+      <h3>Broadcast Equipment</h3>
+      <div class="img-gallery">
+        <figure data-full="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEh9H8F8d0pBR7QcYDc2jBiSHz8VQNwB34MhjChVUotII8ZGiw1hu508WcaixGst5UC6tkMTm9X82rICj4ZMedxxoNsYPSJ7Nb72EUbOprjpW37dNJpfR0pyi0WckGGp1_akNcm2Ch9YLR4/s0/Vista-5---Control-Bay-(3288.jpg">
+          <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEh9H8F8d0pBR7QcYDc2jBiSHz8VQNwB34MhjChVUotII8ZGiw1hu508WcaixGst5UC6tkMTm9X82rICj4ZMedxxoNsYPSJ7Nb72EUbOprjpW37dNJpfR0pyi0WckGGp1_akNcm2Ch9YLR4/w800/Vista-5---Control-Bay-(3288.jpg" alt="Vista Control Bay" loading="lazy"/>
+          <figcaption>Vista-5 Control Bay</figcaption>
+        </figure>
+        <figure data-full="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgHo4OL4Kotkvp306BeK5Uzo_emJZkV6JE_hBZJptBM97kYS2NT3Xa480dE_0kY9GETkXvM3ryiEwqrpokXiTgKje3z6FaKvnYShCv5UpcM-lraLdnSJsZH6xGvSiNsEHZNBJPDDOzm6_k/s0/100128_Snell_CF_panel.jpg">
+          <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgHo4OL4Kotkvp306BeK5Uzo_emJZkV6JE_hBZJptBM97kYS2NT3Xa480dE_0kY9GETkXvM3ryiEwqrpokXiTgKje3z6FaKvnYShCv5UpcM-lraLdnSJsZH6xGvSiNsEHZNBJPDDOzm6_k/w800/100128_Snell_CF_panel.jpg" alt="Snell CF Panel" loading="lazy"/>
+          <figcaption>Snell CF Panel</figcaption>
+        </figure>
+        <figure data-full="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj6KQR9YmRH6GVp1pmgcYMFyc2Ey0WF1vWHj-GD2rNHBZq_osfRVBraF2HcrcdC63MCrI5GrajKA_gz9Pm1d1fQ_DQgc3uugszyo-LILMDSQV2NBMCT53ogv0x6XeI6hDuw6vxejXUX7bE/s0/Sony_PDW_HD1500_VTR_Rental.jpg">
+          <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj6KQR9YmRH6GVp1pmgcYMFyc2Ey0WF1vWHj-GD2rNHBZq_osfRVBraF2HcrcdC63MCrI5GrajKA_gz9Pm1d1fQ_DQgc3uugszyo-LILMDSQV2NBMCT53ogv0x6XeI6hDuw6vxejXUX7bE/w800/Sony_PDW_HD1500_VTR_Rental.jpg" alt="Sony PDW HD1500" loading="lazy"/>
+          <figcaption>Sony PDW HD1500 VTR</figcaption>
+        </figure>
+        <figure data-full="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi0CO9gcUDvatyr3gKTG3XWMflmNFlbPM0BB6iyNoqjG9Fw9dX71scV7Iqq0hfUjA0nqM2e5NC98QqoNR-S0kSDz9_P6Qvn2qH55nhb_UDpacS0wuj7_KQzRhVNQmLQZBW7Zvu0-wARilQ/s0/Sony_PDW_1500_VTR_Hire.jpg">
+          <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi0CO9gcUDvatyr3gKTG3XWMflmNFlbPM0BB6iyNoqjG9Fw9dX71scV7Iqq0hfUjA0nqM2e5NC98QqoNR-S0kSDz9_P6Qvn2qH55nhb_UDpacS0wuj7_KQzRhVNQmLQZBW7Zvu0-wARilQ/w800/Sony_PDW_1500_VTR_Hire.jpg" alt="Sony PDW 1500" loading="lazy"/>
+          <figcaption>Sony PDW-1500 VTR</figcaption>
+        </figure>
+        <figure data-full="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiF4VLXdXiUjNxoOaFgBhzLM2WCRs1johnwpVMBxGMQFeUPpJfF6j6lWdtfiXlkfobIrseZmSAIrC53pAsXAz4EaZTcTdvzKnGZ1kTPruReHV4ktTOlsH4GP1snfw-Eu57NIZsh78DR7pc/s0/111448931232_1.jpg">
+          <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiF4VLXdXiUjNxoOaFgBhzLM2WCRs1johnwpVMBxGMQFeUPpJfF6j6lWdtfiXlkfobIrseZmSAIrC53pAsXAz4EaZTcTdvzKnGZ1kTPruReHV4ktTOlsH4GP1snfw-Eu57NIZsh78DR7pc/w800/111448931232_1.jpg" alt="Broadcast Equipment" loading="lazy"/>
+          <figcaption>Broadcast Equipment</figcaption>
+        </figure>
+        <figure data-full="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjDsV9p8XmFekvOmTUswN52bHqOHPj6XkZx2P5gNUTsVTuqo_JmpuGLMc2uGQw1at1gjrRjNVL2xICM-FY56jH1E17-Y_LY5fAEeV8qKmqAde0bzqqJpwrPzYQpLXPhI9itXKQPXKb1Rx4/s0/1586FIN.jpg">
+          <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjDsV9p8XmFekvOmTUswN52bHqOHPj6XkZx2P5gNUTsVTuqo_JmpuGLMc2uGQw1at1gjrRjNVL2xICM-FY56jH1E17-Y_LY5fAEeV8qKmqAde0bzqqJpwrPzYQpLXPhI9itXKQPXKb1Rx4/w800/1586FIN.jpg" alt="Equipment 1586" loading="lazy"/>
+          <figcaption>1586 FIN</figcaption>
+        </figure>
+        <figure data-full="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiWsdcFslzLN05b8LbyzbgFudtKtoeg2J7iiRyclVD1WYgo40UMUnE40lcdZbwhYHZnXl0YENxPtd8q_neSZ7pZs4gVgH8qFUOMTIUzpTAM0ZDsMAYAngKjacnW7ZgFffltcgkMcfREL7I/s0/DVWA500.jpg">
+          <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiWsdcFslzLN05b8LbyzbgFudtKtoeg2J7iiRyclVD1WYgo40UMUnE40lcdZbwhYHZnXl0YENxPtd8q_neSZ7pZs4gVgH8qFUOMTIUzpTAM0ZDsMAYAngKjacnW7ZgFffltcgkMcfREL7I/w800/DVWA500.jpg" alt="DVWA500" loading="lazy"/>
+          <figcaption>DVWA500</figcaption>
+        </figure>
+        <figure data-full="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi_aBEq-0UiSBOvsZiBrhYBYCbRJKjLGQ7a5zqxvzDR5TlFkU8bMf_ZC2o44-yMrrOZvIiuh5ClmTUFjZh4t7yXc7-7UJLJjEijhKKtEqYp5umsB0tZcnjLonjE3Y7L6dIVKqsUIkgQAU4/s0/Sony_PDW530_PDW_530_XDCAM_Camcorder_428407.jpg">
+          <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi_aBEq-0UiSBOvsZiBrhYBYCbRJKjLGQ7a5zqxvzDR5TlFkU8bMf_ZC2o44-yMrrOZvIiuh5ClmTUFjZh4t7yXc7-7UJLJjEijhKKtEqYp5umsB0tZcnjLonjE3Y7L6dIVKqsUIkgQAU4/w800/Sony_PDW530_PDW_530_XDCAM_Camcorder_428407.jpg" alt="Sony PDW-530" loading="lazy"/>
+          <figcaption>Sony PDW-530 XDCAM</figcaption>
+        </figure>
+        <figure data-full="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgaH0bblNMoqsCZ00BOyFFGoZUTu5fY0agfM_Yi4SHhQmLSMfjayGe47fJAVzZZoGYspILSsfTCxJt-J3g_yqSAqxyIKjlLDqQyFk7dRZzcwC3Y9HJdHkB2v5fX7Pb5nrxsU9TGtaz343U/s0/sony-ca-570p.jpg">
+          <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgaH0bblNMoqsCZ00BOyFFGoZUTu5fY0agfM_Yi4SHhQmLSMfjayGe47fJAVzZZoGYspILSsfTCxJt-J3g_yqSAqxyIKjlLDqQyFk7dRZzcwC3Y9HJdHkB2v5fX7Pb5nrxsU9TGtaz343U/w800/sony-ca-570p.jpg" alt="Sony CA-570P" loading="lazy"/>
+          <figcaption>Sony CA-570P</figcaption>
+        </figure>
+        <figure data-full="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjweWTOmO8c4sobyafRb5L-4r7oZ3-tX5E3uWAvNlRd7kSu7KyobvZKCARdk-H_tx7xCKgSJU2MVb3iDAdF4Zo32rb5mIQvLxAIPomO_S0ppX2dfVIU3xZ-rLgCNivSrSgts0Jmg64z7Ho/s0/1large.png">
+          <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjweWTOmO8c4sobyafRb5L-4r7oZ3-tX5E3uWAvNlRd7kSu7KyobvZKCARdk-H_tx7xCKgSJU2MVb3iDAdF4Zo32rb5mIQvLxAIPomO_S0ppX2dfVIU3xZ-rLgCNivSrSgts0Jmg64z7Ho/w800/1large.png" alt="Equipment diagram" loading="lazy"/>
+          <figcaption>Equipment Diagram</figcaption>
+        </figure>
+        <figure data-full="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhVVQ5Dp8FbLhDcY0xcRPMUALnErsXnsQDCjMI7oFrFMq5A9XQFSfvSMZ-u3naXivLx4auz3Ob-b4c_3T-3JTCK0jmlfGtb2lMCOE0adQRNKD5AiJpYg1PNw-_QZlP20VUWya7UtWcjJAc/s0/PDW-R12551290.jpg">
+          <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhVVQ5Dp8FbLhDcY0xcRPMUALnErsXnsQDCjMI7oFrFMq5A9XQFSfvSMZ-u3naXivLx4auz3Ob-b4c_3T-3JTCK0jmlfGtb2lMCOE0adQRNKD5AiJpYg1PNw-_QZlP20VUWya7UtWcjJAc/w800/PDW-R12551290.jpg" alt="PDW-R1255" loading="lazy"/>
+          <figcaption>Sony PDW-R1255</figcaption>
+        </figure>
+      </div>
+      <div class="drive-wrap">
+        <div class="drive-header">
+          <span>📁 LIBRARY</span> Technical Manuals
+          <a href="https://drive.google.com/drive/folders/1ERCHE1wQwYys9BsypPwBHfHHDmyi_Z94?usp=drive_link" target="_blank" rel="noopener">Open in Drive ↗</a>
+        </div>
+        <iframe src="https://drive.google.com/embeddedfolderview?id=1ERCHE1wQwYys9BsypPwBHfHHDmyi_Z94#list" title="Technical Manuals Library" loading="lazy" allowfullscreen></iframe>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ INFO ════════════════════════════════════════════════ -->
+  <div class="page" id="page-info">
+    <div class="page-title">INFO</div>
+    <div class="content-block">
+      <h3>Video Standards &amp; Pinouts</h3>
+      <div class="img-gallery">
+        <figure data-full="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEidTg5JuKErR4EKtRUCHB86cGQ1YoLzSewNvMpBNjNYdhrMaHQB-PQ5QcmPqpjauPH-Z16L0xvWsZqLjcuKiKdM29X6pIKfPzliopOa-ZgyRDHrMP6AIDMYBtsDWvdkbAXCpMunI9YjsAw/s0/mobile.JPG">
+          <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEidTg5JuKErR4EKtRUCHB86cGQ1YoLzSewNvMpBNjNYdhrMaHQB-PQ5QcmPqpjauPH-Z16L0xvWsZqLjcuKiKdM29X6pIKfPzliopOa-ZgyRDHrMP6AIDMYBtsDWvdkbAXCpMunI9YjsAw/s617/mobile.JPG" alt="Mobile" loading="lazy"/>
+          <figcaption>Mobile Standards</figcaption>
+        </figure>
+        <figure class="wide" data-full="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEh5_N2kvtO85Nq-gC2zhS21LkNXI_p4bGm1eidnlaxuvHTMLsVtcIx8i4tYiV0-qEhkxrv_pruptgr9LnILGVxqswsA1lCwz7EdgkeKWypid34HLK2uiXz7JPh7I6G5tiBTbakaGijp_U0/s0/video_standards.png">
+          <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEh5_N2kvtO85Nq-gC2zhS21LkNXI_p4bGm1eidnlaxuvHTMLsVtcIx8i4tYiV0-qEhkxrv_pruptgr9LnILGVxqswsA1lCwz7EdgkeKWypid34HLK2uiXz7JPh7I6G5tiBTbakaGijp_U0/s1600/video_standards.png" alt="Video Standards" loading="lazy"/>
+          <figcaption>Video Standards Reference</figcaption>
+        </figure>
+        <figure class="wide" data-full="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgbsTCISJyiTAHh0t5wbmHiOBfsWNBiVO-kZoQ9l0sa5mjEo81TfwwO3P5tLHvXlDfOft5yLtn-YvtkHnLe9B1QNj9PT7TgqrhNs6n1c0UBfOTE0reAptCnqwWqlq_H7mrQWlE3BsoBaM0/s0/posterRepro-01.png">
+          <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgbsTCISJyiTAHh0t5wbmHiOBfsWNBiVO-kZoQ9l0sa5mjEo81TfwwO3P5tLHvXlDfOft5yLtn-YvtkHnLe9B1QNj9PT7TgqrhNs6n1c0UBfOTE0reAptCnqwWqlq_H7mrQWlE3BsoBaM0/s1600/posterRepro-01.png" alt="Poster Repro" loading="lazy"/>
+          <figcaption>Colour Reproduction</figcaption>
+        </figure>
+        <figure data-full="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhKRZDLHS0zTBluwaf1-K24KC5P3VnL-5DDGKfYsMgRzG1DWSKm-BPtoxbWbbT9ZV0s9paLIuO1nEYoRPUqOto4BoORQuYnHvZRu79mqytinUs1REYVToqZWdS_Cwov-VOloF8x1O6aapQ/s0/DTV+handbook.JPG">
+          <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhKRZDLHS0zTBluwaf1-K24KC5P3VnL-5DDGKfYsMgRzG1DWSKm-BPtoxbWbbT9ZV0s9paLIuO1nEYoRPUqOto4BoORQuYnHvZRu79mqytinUs1REYVToqZWdS_Cwov-VOloF8x1O6aapQ/s820/DTV+handbook.JPG" alt="DTV Handbook" loading="lazy"/>
+          <figcaption>DTV Handbook</figcaption>
+        </figure>
+        <figure data-full="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgH0eeeOvpwfgVhl7tuiTkBDfRNu8bPx7CcrguZ0f1W-CQXnpHTttuVNcnFFhhjjDLuHlHNxgJMUuCnAFREdRcxnT6kDieQSBdj1Pgq05nOpxwbpDdZNUNo0QRBVZ7-c0_I3_J_UfC6PyY/s0/maxresdefault.jpg">
+          <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgH0eeeOvpwfgVhl7tuiTkBDfRNu8bPx7CcrguZ0f1W-CQXnpHTttuVNcnFFhhjjDLuHlHNxgJMUuCnAFREdRcxnT6kDieQSBdj1Pgq05nOpxwbpDdZNUNo0QRBVZ7-c0_I3_J_UfC6PyY/w800/maxresdefault.jpg" alt="Broadcast diagram" loading="lazy"/>
+          <figcaption>Broadcast Diagram</figcaption>
+        </figure>
+        <figure class="wide" data-full="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi9rMVp1CZmsgcLs8TvpvJAckwZEu_jG07EqVK0qbcMnTDkJM4ogZddAZAJZCQRsA56pCUCKls3OyZEjb6UeKYovy8yZUL3EKdX36hUsATrz6LyQAhVQBd612wPec2sEOpFYLvCjEKvol4/s0/5pin+AU+XLR.jpg">
+          <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi9rMVp1CZmsgcLs8TvpvJAckwZEu_jG07EqVK0qbcMnTDkJM4ogZddAZAJZCQRsA56pCUCKls3OyZEjb6UeKYovy8yZUL3EKdX36hUsATrz6LyQAhVQBd612wPec2sEOpFYLvCjEKvol4/s1600/5pin+AU+XLR.jpg" alt="5-pin AU XLR" loading="lazy"/>
+          <figcaption>5-pin AU XLR Pinout</figcaption>
+        </figure>
+        <figure class="wide" data-full="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhIAlMk9R2Fk3WrOE-MP-WzUT2YRaaBg9t-rJQvH9QOGuRYr8Mh9yHCsMermmHl6io2nQ0gzvBTYHNVPjApiPdiYh3klJ-EIOyaqbmXEJgBxnG4wiqGCjl-vkJ6IsHLDTRD6WlF0OaPtUI/s0/pats+panel+half_norm.jpg">
+          <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhIAlMk9R2Fk3WrOE-MP-WzUT2YRaaBg9t-rJQvH9QOGuRYr8Mh9yHCsMermmHl6io2nQ0gzvBTYHNVPjApiPdiYh3klJ-EIOyaqbmXEJgBxnG4wiqGCjl-vkJ6IsHLDTRD6WlF0OaPtUI/s1600/pats+panel+half_norm.jpg" alt="Patch Panel" loading="lazy"/>
+          <figcaption>Patch Panel Normalisation</figcaption>
+        </figure>
+        <figure data-full="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgjbuCmpLeuzO5a3GyiasAH_23nvLNKpAVN4hiYZbnS3cFsqO6ijSjJQYJB-bBvsajvWM1UFGz8LAmhRcLY3TI1gGD-DRBcLT_7Xt-rRpq4mpc7PGA66Co-4_H2EnSaYnVIL5oLCrukCiY/s0/comm+system+pinouts+updated.jpg">
+          <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgjbuCmpLeuzO5a3GyiasAH_23nvLNKpAVN4hiYZbnS3cFsqO6ijSjJQYJB-bBvsajvWM1UFGz8LAmhRcLY3TI1gGD-DRBcLT_7Xt-rRpq4mpc7PGA66Co-4_H2EnSaYnVIL5oLCrukCiY/s1600/comm+system+pinouts+updated.jpg" alt="Comm System Pinouts" loading="lazy"/>
+          <figcaption>Comm System Pinouts</figcaption>
+        </figure>
+        <figure class="wide" data-full="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgD2md-jN-grDqcBU83lvtVCook6lLh_MwKMSD9ydgamcnEJ28wflBo-wuKSb2jFgbsyIVYSfLQhxvK0aswAREPg-tR0dD7Sj1LtP_tlIa_4_XeaY0Xkr_I1suxd8VmfLh_EIldepLvRNA/s0/talkback+connection.jpg">
+          <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgD2md-jN-grDqcBU83lvtVCook6lLh_MwKMSD9ydgamcnEJ28wflBo-wuKSb2jFgbsyIVYSfLQhxvK0aswAREPg-tR0dD7Sj1LtP_tlIa_4_XeaY0Xkr_I1suxd8VmfLh_EIldepLvRNA/s1600/talkback+connection.jpg" alt="Talkback Connection" loading="lazy"/>
+          <figcaption>Talkback Connection Diagram</figcaption>
+        </figure>
+        <figure class="wide" data-full="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhVOwaCU13UAA6JoZCqNrJz3B8_g2wqnM-C-zsYHSz8jvv1cPludRlxxSxBdUflqi22VTJHfVPo5-DshFGe0SHe2B7L37G74XeAC463GpB-l7CeFjqcs-e41EDGA8ulTG7pKrvCAHV_y7g/s0/Snap_Shot_OSI.jpg">
+          <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhVOwaCU13UAA6JoZCqNrJz3B8_g2wqnM-C-zsYHSz8jvv1cPludRlxxSxBdUflqi22VTJHfVPo5-DshFGe0SHe2B7L37G74XeAC463GpB-l7CeFjqcs-e41EDGA8ulTG7pKrvCAHV_y7g/w800/Snap_Shot_OSI.jpg" alt="OSI Model" loading="lazy"/>
+          <figcaption>OSI Model Overview</figcaption>
+        </figure>
+        <figure data-full="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhJGDEzAf8mgNhKTrDiLCWXDMNB5A74KM_OvN2DEW6VSAXgZYwDUQuh4PfaNG_-vCyTeO1wieN5kfGOjjfefwpMJLdvD45H0RqJxSzRbk6Fmtk2h6WKYZeapdRG9wmUv3Jf76cPgsP-5Fc/s0/Kali_Linux_Cheat_Sheet.png">
+          <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhJGDEzAf8mgNhKTrDiLCWXDMNB5A74KM_OvN2DEW6VSAXgZYwDUQuh4PfaNG_-vCyTeO1wieN5kfGOjjfefwpMJLdvD45H0RqJxSzRbk6Fmtk2h6WKYZeapdRG9wmUv3Jf76cPgsP-5Fc/s1600/Kali_Linux_Cheat_Sheet.png" alt="Kali Linux Cheat Sheet" loading="lazy"/>
+          <figcaption>Kali Linux Cheat Sheet</figcaption>
+        </figure>
+      </div>
+      <div class="drive-wrap">
+        <div class="drive-header">
+          <span>📁 LIBRARY</span> INFO Documents
+          <a href="https://drive.google.com/drive/folders/17sfyfB2OBddkBRQK1oDkDBGoI2pc2tGv?usp=drive_link" target="_blank" rel="noopener">Open in Drive ↗</a>
+        </div>
+        <iframe src="https://drive.google.com/embeddedfolderview?id=17sfyfB2OBddkBRQK1oDkDBGoI2pc2tGv#list" title="INFO Library" loading="lazy" allowfullscreen></iframe>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ PC & NETWORK ════════════════════════════════════════ -->
+  <div class="page" id="page-network">
+    <div class="page-title">PC &amp; Network Tips</div>
+
+    <div class="content-block">
+      <h3>Cisco Quick Reference</h3>
+      <div class="drive-wrap" style="margin-top:1rem">
+        <div class="drive-header">
+          <span>📄 FILE</span> Cisco Command Reference PDF
+          <a href="https://drive.google.com/file/d/1v7iUSXABahYTflzfipN_aK7La90Kwbhj/view?usp=drivesdk" target="_blank" rel="noopener">Open ↗</a>
+        </div>
+        <iframe src="https://drive.google.com/file/d/1v7iUSXABahYTflzfipN_aK7La90Kwbhj/preview" title="Cisco Command PDF" loading="lazy" allowfullscreen></iframe>
+      </div>
+      <p style="font-family:var(--mono);font-size:.8rem;">
+        🔗 <a href="https://www.internetworks.in/" target="_blank" rel="noopener" style="color:var(--cyan);">internetworks.in</a>
+        <span style="color:var(--text-dim);"> — articles &amp; tutorials on networks</span>
+      </p>
+    </div>
+
+    <div class="content-block">
+      <h3>Essential Network Commands</h3>
+      <div class="tips-block">
+<strong>1) ping</strong>  — Check if a host is alive<br/>
+ping x.x.x.x &nbsp;&nbsp;&nbsp; <span style="color:var(--text-dim)">// try: ping 8.8.8.8 or ping www.google.com</span><br/><br/>
+
+<strong>2) nslookup</strong>  — Resolve DNS / find mail server IPs<br/>
+nslookup www.google.com<br/>
+<span style="color:var(--text-dim)">// Find mail servers:</span><br/>
+nslookup → set type=mx → yahoo.com<br/><br/>
+
+<strong>3) tracert</strong>  — Trace packet hops to destination<br/>
+tracert x.x.x.x &nbsp;&nbsp; <span style="color:var(--text-dim)">// or tracert www.google.com</span><br/><br/>
+
+<strong>4) arp</strong>  — Show ARP table / detect ARP poisoning<br/>
+arp -a<br/><br/>
+
+<strong>5) route</strong>  — Show routing table, gateway, interface<br/>
+route print<br/><br/>
+
+<strong>6) ipconfig</strong>  — IP, Gateway, DNS info<br/>
+ipconfig /all<br/>
+ipconfig /release &nbsp;&nbsp; <span style="color:var(--text-dim)">// release dynamic IP</span><br/>
+ipconfig /renew &nbsp;&nbsp;&nbsp; <span style="color:var(--text-dim)">// renew IP</span><br/><br/>
+
+<strong>7) netstat</strong>  — Connection stats<br/>
+netstat -a &nbsp;&nbsp; <span style="color:var(--text-dim)">// all listening ports with DNS</span><br/>
+netstat -n &nbsp;&nbsp; <span style="color:var(--text-dim)">// all connections with IPs</span><br/>
+netstat -an &nbsp; <span style="color:var(--text-dim)">// combined</span><br/><br/>
+
+net view \\x.x.x.x &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style="color:var(--text-dim)">// list shared folders</span><br/>
+net use \\ip\ipc$ "" /user:administrator &nbsp; <span style="color:var(--text-dim)">// connect as admin</span><br/>
+net use K: \\computer\C$ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style="color:var(--text-dim)">// map C drive to K:</span>
+      </div>
+    </div>
+
+    <div class="content-block">
+      <h3>Windows Performance &amp; Tweaks</h3>
+      <div class="tips-block">
+<strong>1)</strong> Win+R → <strong>gpedit.msc</strong> → Local Computer Policy → Computer Config → Admin Templates → Windows Components → MS Defender → MAPS → Send files samples (enable: always prompt)<br/><br/>
+<strong>2)</strong> Win+R → <strong>sysdm.cpl</strong> → Advanced → Performance Settings → Adjust for best performance<br/><br/>
+<strong>3)</strong> Win+R → <strong>msconfig</strong> → Boot → Advanced Options → Number of processors: MAX<br/><br/>
+<strong>4)</strong> System → Display → Graphics → Default graphics settings → Optimization for windowed games: ON<br/><br/>
+<strong>Shift+Ctrl+Win+B</strong> &nbsp;— Restart video drivers (when frozen)<br/>
+<strong>Ctrl+Shift+T</strong> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;— Reopen accidentally closed browser tab<br/><br/>
+Win+R → <strong>mrt</strong> → Full scan &nbsp;&nbsp; <span style="color:var(--text-dim)">// Remove viruses</span><br/><br/>
+<span style="color:var(--text-dim)">// Slow CPU fix:</span><br/>
+CMD (admin): powercfg /setacvalueindex scheme_current sub_processor toldisable 000<br/>
+CMD (admin): powercfg /setactive scheme_current<br/><br/>
+<span style="color:var(--text-dim)">// Windows Activation:</span><br/>
+PowerShell (admin): irm https://massgrave.dev/get | iex<br/><br/>
+<span style="color:var(--text-dim)">// Find saved WiFi passwords:</span><br/>
+netsh wlan show profiles<br/>
+netsh wlan show profile name="PROFILE_NAME" key=clear<br/><br/>
+<span style="color:var(--text-dim)">// Battery report:</span><br/>
+CMD admin: powercfg /batteryreport<br/><br/>
+<span style="color:var(--text-dim)">// Reset BIOS password:</span> <a href="http://www.bios-pw.org" target="_blank">bios-pw.org</a>
+      </div>
+    </div>
+
+    <div class="content-block">
+      <h3>VPN Protocol Guide</h3>
+      <div class="img-gallery">
+        <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjF1fpy3qd14CeGgNnF8F99hf5b5I8VOdejR_l-AcBG7jyEvCacquae3Dn_L05JPlUHZnteHOAX0uC7245OmPA-7DjvJSryc-6YtlgdKHuWptoZIurH2cKtjVWyOjAY-EYUc3Af8gA-e4W_C85U6IuF0rkL_TUY24uvGL0amoipQWMDqs6BgAB9FA4fZG4/s1745/types%20of%20VPN.jpg" alt="Types of VPN"/>
+      </div>
+      <div class="tips-block" style="margin-top:1rem">
+<strong>TCP</strong> &nbsp;&nbsp; — Reliability (ordered delivery)<br/>
+<strong>UDP</strong> &nbsp;&nbsp; — Speed (lower latency)<br/>
+<strong>IKEv2</strong> — Mobility + strong security (ideal for mobile)<br/>
+<strong>Xray</strong> &nbsp; — Advanced privacy &amp; anti-censorship
+      </div>
+      <div class="drive-wrap">
+        <div class="drive-header">
+          <span>📁 LIBRARY</span> PC &amp; Network Documents
+          <a href="https://drive.google.com/drive/folders/1BwBlxf3SDsoPD-hIEX6Bh4muqTi7BsQW" target="_blank" rel="noopener">Open in Drive ↗</a>
+        </div>
+        <iframe src="https://drive.google.com/embeddedfolderview?id=1BwBlxf3SDsoPD-hIEX6Bh4muqTi7BsQW#list" title="PC Network Library" loading="lazy" allowfullscreen></iframe>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ RF & MICROWAVES ════════════════════════════════════ -->
+  <div class="page" id="page-rf">
+    <div class="page-title">RF &amp; Microwaves</div>
+    <div class="content-block">
+      <div class="img-gallery">
+        <figure data-full="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi534QgmRP6n7diCVN0-o3coSZAlV8YKwOrVfRWI15sAoqzw4RcqfYoFbVDR0JiYinePDWnt-IrdCGKEy16kLt3QFUZrVLrEfIxbTiKzot5RwfUC1Br4keYNucTh_Jle3s1WC9PjkHag2Zk6z65LKQVezgQXbh42G3HZ1KI65pz1Es-oZYLuPGdNm0ZlSw/s0/9623.jpg">
+          <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi534QgmRP6n7diCVN0-o3coSZAlV8YKwOrVfRWI15sAoqzw4RcqfYoFbVDR0JiYinePDWnt-IrdCGKEy16kLt3QFUZrVLrEfIxbTiKzot5RwfUC1Br4keYNucTh_Jle3s1WC9PjkHag2Zk6z65LKQVezgQXbh42G3HZ1KI65pz1Es-oZYLuPGdNm0ZlSw/w800/9623.jpg" alt="RF Equipment" loading="lazy"/>
+          <figcaption>RF Equipment</figcaption>
+        </figure>
+        <figure class="wide" data-full="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEg9a7JoWxQDb-lQrdbVKzT5BpvTYq4Q_WYJ9Z5HX0NgJJULHQEzqHhrU-VoHiNYcrQ87qC-xiniRtyd2jMqc1GfJV1IwUSDeMLKFUR2QLSbp6Kx_NuXBtU4ZVok3r6l0L6AhEUWK1NoM1jEzlvAH5hwOcHfdloKkULA0OcTXZYxAN7cJpjuEogkfoJkNP0/s0/RF%20&%20MICROWAVE.png">
+          <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEg9a7JoWxQDb-lQrdbVKzT5BpvTYq4Q_WYJ9Z5HX0NgJJULHQEzqHhrU-VoHiNYcrQ87qC-xiniRtyd2jMqc1GfJV1IwUSDeMLKFUR2QLSbp6Kx_NuXBtU4ZVok3r6l0L6AhEUWK1NoM1jEzlvAH5hwOcHfdloKkULA0OcTXZYxAN7cJpjuEogkfoJkNP0/s722/RF%20&%20MICROWAVE.png" alt="RF & Microwave Chart" loading="lazy"/>
+          <figcaption>RF &amp; Microwave Frequency Chart</figcaption>
+        </figure>
+      </div>
+      <div class="drive-wrap">
+        <div class="drive-header">
+          <span>📁 LIBRARY</span> RF &amp; Microwave Documents
+          <a href="https://drive.google.com/drive/folders/1iSSG4Gl4oyKbSIt16ho0miOS36DzwJO4" target="_blank" rel="noopener">Open in Drive ↗</a>
+        </div>
+        <iframe src="https://drive.google.com/embeddedfolderview?id=1iSSG4Gl4oyKbSIt16ho0miOS36DzwJO4#list" title="RF Microwave Library" loading="lazy" allowfullscreen></iframe>
+      </div>
+    </div>
+
+    <div class="content-block">
+      <h3>Android Privacy Tips</h3>
+      <div class="tips-block">
+<strong>3 settings to turn OFF</strong> (stop developers tracking everything):<br/><br/>
+<strong>a)</strong> Settings → Google → All Settings → Usage and diagnostics → <span style="color:var(--red)">DISABLE</span><br/><br/>
+<strong>b)</strong> Settings → Digital Wellbeing → ⚙️ Settings → Customization service → <span style="color:var(--red)">OFF</span><br/><br/>
+<strong>c)</strong> Settings → Digital Wellbeing → ⚙️ Settings → Usage data access → <span style="color:var(--red)">OFF</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ OTHER STUFF ════════════════════════════════════════ -->
+  <div class="page" id="page-other">
+    <div class="page-title">Other Technical Stuff</div>
+    <div class="content-block">
+      <h3>AI, Cybersecurity &amp; More</h3>
+      <div class="img-gallery">
+        <figure class="wide" data-full="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiibpI1SZxekSBcdXZn5bzoau8SFgXJvYGX1ltOCNYA5ZDWzeArwcSr5tiKn2Wv0IT_0wB56e_cXVONtvTfY9OGHyNBQACkekViZyKhANCTBl8dGcbhjYM9GaxMdu36yvj5TN-sIQ4-LPBVuKXUcrmbEC7bfw8HZm8ESJpPjrMeLN6LiVdA-xCxJuRirlE/s0/Ai%20universe.gif">
+          <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiibpI1SZxekSBcdXZn5bzoau8SFgXJvYGX1ltOCNYA5ZDWzeArwcSr5tiKn2Wv0IT_0wB56e_cXVONtvTfY9OGHyNBQACkekViZyKhANCTBl8dGcbhjYM9GaxMdu36yvj5TN-sIQ4-LPBVuKXUcrmbEC7bfw8HZm8ESJpPjrMeLN6LiVdA-xCxJuRirlE/s939/Ai%20universe.gif" alt="AI Universe" loading="lazy"/>
+          <figcaption>AI Universe</figcaption>
+        </figure>
+        <figure class="wide" data-full="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhS_EGo6ZJAVJFUewSRdzA4UnK5WbJKQIJ0HIY5X5KlmQlMgMWR6VeGlq-VEb92SZ_Q2-C2-2-pNVEK0SDHhkLwXjQWmGgT-MG6M002KShdUPVJbC0BW4GthBBh7xlrH3obpn6DhkY6PojhzJkZbdhaK3brNeqfsvPb86B4X6rvzhYcK2wa3YWd1j5qZxA/s0/types%20of%20cyber%20Attack%20___.gif">
+          <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhS_EGo6ZJAVJFUewSRdzA4UnK5WbJKQIJ0HIY5X5KlmQlMgMWR6VeGlq-VEb92SZ_Q2-C2-2-pNVEK0SDHhkLwXjQWmGgT-MG6M002KShdUPVJbC0BW4GthBBh7xlrH3obpn6DhkY6PojhzJkZbdhaK3brNeqfsvPb86B4X6rvzhYcK2wa3YWd1j5qZxA/s935/types%20of%20cyber%20Attack%20___.gif" alt="Types of Cyber Attack" loading="lazy"/>
+          <figcaption>Types of Cyber Attack</figcaption>
+        </figure>
+        <figure class="wide" data-full="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEizFNVtcjYK09uFa0AaABDec6hhkZkoZGbU9YHj3fInGqv2ovuOpAyzPM62Ymh2YnCr2LEZ2N1vJ24LFep04PugVLHgG9PlVp1_EpCsfO4bei5lGTT4NBQGjo81_8uVF2Y44xn-NwQuBomY65evSVmgqAiEZa1V_m65kPK4-HBV5253GxCQU8jTKjE4Vvo/s0/AI%20agents.gif">
+          <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEizFNVtcjYK09uFa0AaABDec6hhkZkoZGbU9YHj3fInGqv2ovuOpAyzPM62Ymh2YnCr2LEZ2N1vJ24LFep04PugVLHgG9PlVp1_EpCsfO4bei5lGTT4NBQGjo81_8uVF2Y44xn-NwQuBomY65evSVmgqAiEZa1V_m65kPK4-HBV5253GxCQU8jTKjE4Vvo/s1111/AI%20agents.gif" alt="AI Agents" loading="lazy"/>
+          <figcaption>AI Agents</figcaption>
+        </figure>
+        <figure class="wide" data-full="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgiMtJAwYrhLvwUjUI59CjpvfuHuaiHhWeVBdKw-n5bsO4Fdg5GJXKm9VtBTn5iIIX_StD1MFtrPaLOnd6acNP-juWK52i3vVOCHhdmRbkVnMJbZd2XJVPTn5-Ep1B7KRstRqtJ6PwM3CPoOrkTTXIBIdYgIx4JWAyMBqxzCdmJkpEz1XBKRw0pofxmlzA/s0/cyber%20sec%20(1).gif">
+          <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgiMtJAwYrhLvwUjUI59CjpvfuHuaiHhWeVBdKw-n5bsO4Fdg5GJXKm9VtBTn5iIIX_StD1MFtrPaLOnd6acNP-juWK52i3vVOCHhdmRbkVnMJbZd2XJVPTn5-Ep1B7KRstRqtJ6PwM3CPoOrkTTXIBIdYgIx4JWAyMBqxzCdmJkpEz1XBKRw0pofxmlzA/s800/cyber%20sec%20(1).gif" alt="Cyber Security" loading="lazy"/>
+          <figcaption>Cyber Security</figcaption>
+        </figure>
+        <figure class="wide" data-full="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEg4KoO58Ug7pKY7runBUVtRrS5lQjWs-OTTEGVHM4lzwiHNgilQVqDISBDEJ7sby5Xy32MPz6R68a8NP8a73fcwhcMveekbXV6JOlk7-NykX5SlmtAUpn_V5TGv6EAhm6KqsEtH_RkJ2eD7n_zM6hdEWo9Y8jDOAOYD0qB9LFucP_K0GcuP6a3HyrjWsKM/s0/cybersecurity%20framework_templates.gif">
+          <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEg4KoO58Ug7pKY7runBUVtRrS5lQjWs-OTTEGVHM4lzwiHNgilQVqDISBDEJ7sby5Xy32MPz6R68a8NP8a73fcwhcMveekbXV6JOlk7-NykX5SlmtAUpn_V5TGv6EAhm6KqsEtH_RkJ2eD7n_zM6hdEWo9Y8jDOAOYD0qB9LFucP_K0GcuP6a3HyrjWsKM/s1080/cybersecurity%20framework_templates.gif" alt="Cybersecurity Framework" loading="lazy"/>
+          <figcaption>Cybersecurity Framework Templates</figcaption>
+        </figure>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<!-- STATUS BAR -->
+<div class="status-bar">
+  <div class="status-dot"></div>
+  <span>Powered by <a href="mailto:thanos.anastasiadis@gmail.com" style="color:var(--amber);text-decoration:none;">Thanos Anastasiadis</a></span>
+</div>
+
+<!-- LIGHTBOX -->
+<div id="lightbox">
+  <img id="lightbox-img" src="" alt=""/>
+</div>
+
+<script>
+// ── ROUTING ─────────────────────────────────────────────────
+const pages = {
+  home:    document.getElementById('page-home'),
+  iptv:    document.getElementById('page-iptv'),
+  tech:    document.getElementById('page-tech'),
+  info:    document.getElementById('page-info'),
+  network: document.getElementById('page-network'),
+  rf:      document.getElementById('page-rf'),
+  other:   document.getElementById('page-other'),
+};
+
+function navigate(id) {
+  Object.values(pages).forEach(p => p.classList.remove('active'));
+  const target = pages[id] || pages.home;
+  target.classList.add('active');
+
+  document.querySelectorAll('nav a').forEach(a => {
+    a.classList.toggle('active', a.dataset.page === id);
+  });
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  location.hash = id;
+}
+
+// Hash-based routing
+function routeFromHash() {
+  const id = location.hash.replace('#', '') || 'home';
+  navigate(id);
+}
+
+window.addEventListener('hashchange', routeFromHash);
+routeFromHash();
+
+// Nav click
+document.querySelectorAll('nav a').forEach(a => {
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    navigate(a.dataset.page);
+    nav.classList.remove('open');
+  });
+});
+
+// Logo click
+document.querySelector('.logo').addEventListener('click', () => navigate('home'));
+
+// ── HAMBURGER ────────────────────────────────────────────────
+const hamburger = document.getElementById('hamburger');
+const nav       = document.getElementById('nav');
+hamburger.addEventListener('click', () => nav.classList.toggle('open'));
+
+// Close menu when clicking outside
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('header')) {
+    nav.classList.remove('open');
+  }
+});
+
+// ── LIGHTBOX ─────────────────────────────────────────────────
+const lb    = document.getElementById('lightbox');
+const lbImg = document.getElementById('lightbox-img');
+
+document.querySelectorAll('.img-gallery figure').forEach(fig => {
+  fig.addEventListener('click', () => {
+    const fullSrc = fig.dataset.full || fig.querySelector('img')?.src || '';
+    lbImg.src = fullSrc;
+    lb.classList.add('open');
+  });
+});
+
+lb.addEventListener('click', () => lb.classList.remove('open'));
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') lb.classList.remove('open');
+});
+</script>
+</body>
+</html>
