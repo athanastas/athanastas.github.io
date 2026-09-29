@@ -300,32 +300,59 @@
   /* ── DRIVE EMBED ─────────────────────────────────────── */
   .drive-wrap {
     margin-top: 1.25rem;
-    border: 1px solid var(--border);
-    border-radius: 6px;
+    border: 2px solid var(--border);
+    border-radius: 8px;
     overflow: hidden;
-    background: var(--surface2);
+    background: linear-gradient(135deg, var(--surface2) 0%, rgba(24,28,34,.6) 100%);
+    transition: all .3s ease;
+    cursor: pointer;
+  }
+  .drive-wrap:hover {
+    border-color: var(--amber);
+    background: linear-gradient(135deg, var(--surface2) 0%, rgba(24,28,34,.8) 100%);
+    box-shadow: 0 8px 32px rgba(240,165,0,.15);
+    transform: translateY(-2px);
   }
   .drive-header {
     display: flex; align-items: center; justify-content: space-between;
-    padding: .6rem 1rem;
-    background: rgba(0,0,0,.3);
-    border-bottom: 1px solid var(--border);
+    padding: 1rem 1.2rem;
+    background: rgba(0,0,0,.2);
     font-family: var(--mono);
-    font-size: .7rem;
+    font-size: .75rem;
     color: var(--text-dim);
     letter-spacing: .06em;
   }
-  .drive-header span { color: var(--amber); }
-  .drive-header a {
-    color: var(--text-dim);
-    text-decoration: none;
-    font-size: .68rem;
-    padding: .2rem .5rem;
-    border: 1px solid var(--border);
-    border-radius: 3px;
-    transition: all .2s;
+  .drive-wrap:hover .drive-header {
+    background: rgba(240,165,0,.08);
   }
-  .drive-header a:hover { color: var(--amber); border-color: var(--amber); }
+  .drive-header span { 
+    color: var(--amber);
+    font-weight: 600;
+  }
+  .drive-header a {
+    color: var(--cyan);
+    text-decoration: none;
+    font-size: .7rem;
+    padding: .4rem .8rem;
+    border: 1px solid var(--cyan);
+    border-radius: 4px;
+    transition: all .2s;
+    background: rgba(0,212,255,.08);
+    font-weight: 500;
+  }
+  .drive-wrap:hover .drive-header a { 
+    color: var(--amber);
+    border-color: var(--amber);
+    background: rgba(240,165,0,.12);
+  }
+
+  /* ── LIBRARY LINK BUTTON ─────────────────────────────── */
+  .lib-link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+  }
+
   .drive-wrap iframe {
     display: block;
     width: 100%;
@@ -567,13 +594,12 @@
           <figcaption>IPTV Configuration Guide</figcaption>
         </figure>
       </div>
-      <div class="drive-wrap">
+      <a href="https://drive.google.com/drive/folders/15g0ZBMrghJJNdi3gNVBg_YxXPdTg9vK0?usp=drive_link" target="_blank" rel="noopener" class="drive-wrap lib-link">
         <div class="drive-header">
           <span>📁 LIBRARY</span> IP TV Manuals
-          <a href="https://drive.google.com/drive/folders/15g0ZBMrghJJNdi3gNVBg_YxXPdTg9vK0?usp=drive_link" target="_blank" rel="noopener">Open in Drive ↗</a>
+          <span style="margin-left:auto;font-size:.68rem;color:var(--cyan);font-weight:500;">Open in Drive ↗</span>
         </div>
-        <iframe src="https://drive.google.com/embeddedfolderview?id=15g0ZBMrghJJNdi3gNVBg_YxXPdTg9vK0#list" title="IP TV Library" loading="lazy" allowfullscreen></iframe>
-      </div>
+      </a>
     </div>
   </div>
 
@@ -628,13 +654,12 @@
           <figcaption>Sony PDW-R1255</figcaption>
         </figure>
       </div>
-      <div class="drive-wrap">
+      <a href="https://drive.google.com/drive/folders/1ERCHE1wQwYys9BsypPwBHfHHDmyi_Z94?usp=drive_link" target="_blank" rel="noopener" class="drive-wrap lib-link">
         <div class="drive-header">
           <span>📁 LIBRARY</span> Technical Manuals
-          <a href="https://drive.google.com/drive/folders/1ERCHE1wQwYys9BsypPwBHfHHDmyi_Z94?usp=drive_link" target="_blank" rel="noopener">Open in Drive ↗</a>
+          <span style="margin-left:auto;font-size:.68rem;color:var(--cyan);font-weight:500;">Open in Drive ↗</span>
         </div>
-        <iframe src="https://drive.google.com/embeddedfolderview?id=1ERCHE1wQwYys9BsypPwBHfHHDmyi_Z94#list" title="Technical Manuals Library" loading="lazy" allowfullscreen></iframe>
-      </div>
+      </a>
     </div>
   </div>
 
@@ -689,13 +714,12 @@
           <figcaption>Kali Linux Cheat Sheet</figcaption>
         </figure>
       </div>
-      <div class="drive-wrap">
+      <a href="https://drive.google.com/drive/folders/17sfyfB2OBddkBRQK1oDkDBGoI2pc2tGv?usp=drive_link" target="_blank" rel="noopener" class="drive-wrap lib-link">
         <div class="drive-header">
           <span>📁 LIBRARY</span> INFO Documents
-          <a href="https://drive.google.com/drive/folders/17sfyfB2OBddkBRQK1oDkDBGoI2pc2tGv?usp=drive_link" target="_blank" rel="noopener">Open in Drive ↗</a>
+          <span style="margin-left:auto;font-size:.68rem;color:var(--cyan);font-weight:500;">Open in Drive ↗</span>
         </div>
-        <iframe src="https://drive.google.com/embeddedfolderview?id=17sfyfB2OBddkBRQK1oDkDBGoI2pc2tGv#list" title="INFO Library" loading="lazy" allowfullscreen></iframe>
-      </div>
+      </a>
     </div>
   </div>
 
@@ -740,13 +764,12 @@ CMD admin: powercfg /batteryreport<br/><br/>
 
     <div class="content-block">
       <h3>Cisco Quick Reference</h3>
-      <div class="drive-wrap" style="margin-top:1rem">
+      <a href="https://drive.google.com/file/d/1v7iUSXABahYTflzfipN_aK7La90Kwbhj/view?usp=drivesdk" target="_blank" rel="noopener" class="drive-wrap lib-link" style="margin-top:1rem">
         <div class="drive-header">
           <span>📄 FILE</span> Cisco Command Reference PDF
-          <a href="https://drive.google.com/file/d/1v7iUSXABahYTflzfipN_aK7La90Kwbhj/view?usp=drivesdk" target="_blank" rel="noopener">Open ↗</a>
+          <span style="margin-left:auto;font-size:.68rem;color:var(--cyan);font-weight:500;">Open ↗</span>
         </div>
-        <iframe src="https://drive.google.com/file/d/1v7iUSXABahYTflzfipN_aK7La90Kwbhj/preview" title="Cisco Command PDF" loading="lazy" allowfullscreen></iframe>
-      </div>
+      </a>
       <p style="font-family:var(--mono);font-size:.8rem;">
         🔗 <a href="https://www.internetworks.in/" target="_blank" rel="noopener" style="color:var(--cyan);">internetworks.in</a>
         <span style="color:var(--text-dim);"> — articles &amp; tutorials on networks</span>
@@ -764,13 +787,12 @@ CMD admin: powercfg /batteryreport<br/><br/>
 <strong>IKEv2</strong> — Mobility + strong security (ideal for mobile)<br/>
 <strong>Xray</strong> &nbsp; — Advanced privacy &amp; anti-censorship
       </div>
-      <div class="drive-wrap">
+      <a href="https://drive.google.com/drive/folders/1BwBlxf3SDsoPD-hIEX6Bh4muqTi7BsQW" target="_blank" rel="noopener" class="drive-wrap lib-link">
         <div class="drive-header">
           <span>📁 LIBRARY</span> PC &amp; Network Documents
-          <a href="https://drive.google.com/drive/folders/1BwBlxf3SDsoPD-hIEX6Bh4muqTi7BsQW" target="_blank" rel="noopener">Open in Drive ↗</a>
+          <span style="margin-left:auto;font-size:.68rem;color:var(--cyan);font-weight:500;">Open in Drive ↗</span>
         </div>
-        <iframe src="https://drive.google.com/embeddedfolderview?id=1BwBlxf3SDsoPD-hIEX6Bh4muqTi7BsQW#list" title="PC Network Library" loading="lazy" allowfullscreen></iframe>
-      </div>
+      </a>
     </div>
   </div>
 
@@ -788,13 +810,12 @@ CMD admin: powercfg /batteryreport<br/><br/>
           <figcaption>RF &amp; Microwave Frequency Chart</figcaption>
         </figure>
       </div>
-      <div class="drive-wrap">
+      <a href="https://drive.google.com/drive/folders/1iSSG4Gl4oyKbSIt16ho0miOS36DzwJO4" target="_blank" rel="noopener" class="drive-wrap lib-link">
         <div class="drive-header">
           <span>📁 LIBRARY</span> RF &amp; Microwave Documents
-          <a href="https://drive.google.com/drive/folders/1iSSG4Gl4oyKbSIt16ho0miOS36DzwJO4" target="_blank" rel="noopener">Open in Drive ↗</a>
+          <span style="margin-left:auto;font-size:.68rem;color:var(--cyan);font-weight:500;">Open in Drive ↗</span>
         </div>
-        <iframe src="https://drive.google.com/embeddedfolderview?id=1iSSG4Gl4oyKbSIt16ho0miOS36DzwJO4#list" title="RF Microwave Library" loading="lazy" allowfullscreen></iframe>
-      </div>
+      </a>
     </div>
 
     <div class="content-block">
